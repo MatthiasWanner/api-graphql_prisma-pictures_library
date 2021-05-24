@@ -12,14 +12,14 @@ generator client {
 
 model User {
   id            Int       @default(autoincrement()) @id
-  username      String    @unique
+  userName      String    @unique
   name          String?   
-  lastname      String?
+  lastName      String?
   email         String?   @unique
   role          Role      @default(USER)
   profile       Profile?
   createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map(name: "updated_at")
   pictures      Picture[]
   albums        Album[]
   categories    Category[]

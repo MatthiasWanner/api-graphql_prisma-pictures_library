@@ -2,12 +2,21 @@
   "name": "photos_library",
   "version": "1.0.0",
   "description": "API that collect pictures and albums from users",
-  "main": "server.ts",
+  "main": "server.js",
+  "scripts": {
+    "dev": "ts-node-dev --pretty --respawn ./src/server.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
   "author": "MatthiasWanner <matthias.wanner@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "2.23.0",
+    "@prisma/client": "^2.23.0",
+    "apollo-server-express": "^2.24.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "graphql": "^15.5.0",
     "prisma": "2.23.0"
   },
   "devDependencies": {
