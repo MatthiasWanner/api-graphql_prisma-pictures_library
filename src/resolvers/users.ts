@@ -1,5 +1,3 @@
-import { errorMonitor } from "events";
-import { argsToArgsConfig } from "graphql/type/definition";
 import prisma from "../../lib/prisma";
 
 type Args = { id: string };

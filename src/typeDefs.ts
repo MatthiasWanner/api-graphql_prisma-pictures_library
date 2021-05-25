@@ -2,7 +2,7 @@ import { gql } from "apollo-server-core";
 
 export default gql`
   type User {
-    id: ID
+    id: ID!
     userName: String!
     name: String
     lastName: String
@@ -77,9 +77,14 @@ export default gql`
   }
 
   input albumCreateInput {
+    authorId: String!
     title: String!
-    content: String
-    categories: String
+  }
+
+  input albumUpdateInput {
+    title: String
+    content: [String]
+    categories: [String]
   }
 
   type Query {
@@ -99,6 +104,7 @@ export default gql`
     deleteUser(id: ID): User
     updateProfile(userId: ID, data: profileInput): Profile
     createAlbum(authorId: Int, data: albumCreateInput): Album
+    updateAlbum(id: ID, data: albumUpdateInput): Album
     createCategory(userId: Int, name: String): Category
     postPicture(name: String): Picture
   }
