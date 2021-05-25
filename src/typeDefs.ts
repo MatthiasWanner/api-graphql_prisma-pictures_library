@@ -65,6 +65,12 @@ export default gql`
     lastName: String
   }
 
+  input updateUserInput {
+    email: String
+    name: String
+    lastName: String
+  }
+
   input profileInput {
     bio: String
     profileImg: String
@@ -83,13 +89,15 @@ export default gql`
     album(id: ID): Album
     categories: [Category]
     categorie(id: ID): Category
-    profile(userId: Int): Profile
+    profile(userId: ID): Profile
     pictures(picturesId: [Int]): [Picture]
   }
 
   type Mutation {
     createUser(data: userCreateInput): User
-    createProfile(userId: ID, data: profileInput): Profile
+    updateUser(id: ID, data: updateUserInput): User
+    deleteUser(id: ID): User
+    updateProfile(userId: ID, data: profileInput): Profile
     createAlbum(authorId: Int, data: albumCreateInput): Album
     createCategory(userId: Int, name: String): Category
     postPicture(name: String): Picture

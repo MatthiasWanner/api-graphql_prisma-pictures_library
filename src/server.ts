@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import typeDefs from "./typeDefs";
 
 import { userMutations, userQueries } from "./resolvers/users";
+import { profileMutations, profileQueries } from "./resolvers/profiles";
 
 dotenv.config();
 
@@ -20,9 +21,11 @@ const main = async () => {
     resolvers: {
       Query: {
         ...userQueries,
+        ...profileQueries,
       },
       Mutation: {
         ...userMutations,
+        ...profileMutations,
       },
     },
   });
