@@ -10,19 +10,28 @@ type updateProfile = {
 };
 
 export const profileQueries = {
-  profile: async (_parent: any, args: Args, _context: any) => {
-    const profile = await prisma.profile.findUnique({
-      where: {
-        userId: +args.userId,
-      },
-    });
-    return profile;
+  profile: (_parent: any, args: Args, _context: any) => {
+    return prisma.user
+      .findUnique({
+        where: {
+          id: +args.userId,
+        },
+      })
+      .profile();
   },
 };
 
 export const profileMutations = {
   updateProfile: async (_parent: any, args: updateProfile, _context: any) => {
-    await prisma.profile.update({
+    await prisma.user
+      .findUnique({
+        where: {
+          id: +args.userId,
+        },
+      })
+      .profile();
+
+    return prisma.profile.update({
       where: {
         userId: +args.userId,
       },
@@ -31,12 +40,5 @@ export const profileMutations = {
         profileImg: args.data.profileImg,
       },
     });
-    const profileCreated = await prisma.profile.findUnique({
-      where: {
-        userId: +args.userId,
-      },
-    });
-
-    return profileCreated;
   },
 };

@@ -21,19 +21,16 @@ type updateUser = {
 };
 
 export const userQueries = {
-  users: async () => {
-    const allUsers = await prisma.user.findMany();
-    console.log(allUsers);
-    return allUsers;
+  users: () => {
+    return prisma.user.findMany();
   },
 
-  user: async (_parent: any, args: Args, _context: any) => {
-    const user = await prisma.user.findUnique({
+  user: (_parent: any, args: Args, _context: any) => {
+    return prisma.user.findUnique({
       where: {
         id: +args.id,
       },
     });
-    return user;
   },
 };
 
@@ -47,11 +44,13 @@ export const userMutations = {
         lastName: args.data.lastName,
       },
     });
+
     const userCreated = await prisma.user.findUnique({
       where: {
         userName: args.data.userName,
       },
     });
+
     await prisma.profile.create({
       data: {
         bio: "",
@@ -61,11 +60,10 @@ export const userMutations = {
     });
 
     return userCreated;
-    //dev
   },
 
   updateUser: async (_parent: any, args: updateUser, _context: any) => {
-    await prisma.user.update({
+    return await prisma.user.update({
       where: {
         id: +args.id,
       },
@@ -75,13 +73,6 @@ export const userMutations = {
         lastName: args.data.lastName,
       },
     });
-    const profileUpdated = await prisma.user.findUnique({
-      where: {
-        id: +args.id,
-      },
-    });
-
-    return profileUpdated;
   },
 
   deleteUser: async (_parent: any, args: Args, _context: any) => {

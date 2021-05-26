@@ -76,6 +76,19 @@ export default gql`
     profileImg: String
   }
 
+  input createPictureInput {
+    title: String!
+    url: String!
+    description: String
+    ownerId: String!
+  }
+
+  input updatePictureInput {
+    title: String!
+    url: String!
+    description: String
+  }
+
   input albumCreateInput {
     authorId: String!
     title: String!
@@ -90,12 +103,13 @@ export default gql`
   type Query {
     users: [User]
     user(id: ID): User
+    profile(userId: ID): Profile
+    pictures(picturesId: [Int]): [Picture]
+    picture(id: ID): Picture
     albums: [Album]
     album(id: ID): Album
     categories: [Category]
     categorie(id: ID): Category
-    profile(userId: ID): Profile
-    pictures(picturesId: [Int]): [Picture]
   }
 
   type Mutation {
@@ -103,9 +117,11 @@ export default gql`
     updateUser(id: ID, data: updateUserInput): User
     deleteUser(id: ID): User
     updateProfile(userId: ID, data: profileInput): Profile
+    createPicture(data: createPictureInput): Picture
+    updatePicture(id: ID, data: updatePictureInput): Picture
+    deletePicture(id: ID): Picture
     createAlbum(authorId: Int, data: albumCreateInput): Album
     updateAlbum(id: ID, data: albumUpdateInput): Album
     createCategory(userId: Int, name: String): Category
-    postPicture(name: String): Picture
   }
 `;

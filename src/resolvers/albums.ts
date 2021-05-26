@@ -37,27 +37,22 @@ export const albumQueries = {
 
 export const albumMutations = {
   createAlbum: async (_parent: any, args: CreateAlbum, _context: any) => {
-    await prisma.album.create({
-      data: {
-        title: args.data.title,
-        authorId: +args.data.authorId,
-      },
-    });
-
-    return { title: args.data.title, authorId: +args.data.authorId };
+    try {
+      return await prisma.album.create({
+        data: {
+          title: args.data.title,
+          authorId: +args.data.authorId,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+      return { message: "erreur", error: e.stack };
+    }
   },
 
   // updateAlbum: async (_parent: any, args: updateAlbum, _context: any) => {
+  //    Promise.all()
   //   const pictures: [] = [];
-  //   args.data.content.forEach(async (pictureId) => {
-  //     const picture = await prisma.picture.findUnique({
-  //       where: {
-  //         id: +pictureId,
-  //       }
-  //     })
-  //     pictures.push(picture);
-  //   })
-
   //   await prisma.album.update({
   //     where: {
   //       id: +args.id,

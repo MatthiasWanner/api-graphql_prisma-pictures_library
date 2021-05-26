@@ -8,6 +8,7 @@ import typeDefs from "./typeDefs";
 import { userMutations, userQueries } from "./resolvers/users";
 import { profileMutations, profileQueries } from "./resolvers/profiles";
 import { albumMutations, albumQueries } from "./resolvers/albums";
+import { pictureMutations, pictureQueries } from "./resolvers/pictures";
 
 dotenv.config();
 
@@ -23,11 +24,13 @@ const main = async () => {
       Query: {
         ...userQueries,
         ...profileQueries,
+        ...pictureQueries,
         ...albumQueries,
       },
       Mutation: {
         ...userMutations,
         ...profileMutations,
+        ...pictureMutations,
         ...albumMutations,
       },
     },
