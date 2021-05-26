@@ -106,10 +106,10 @@ export default gql`
     profile(userId: ID): Profile
     pictures(picturesId: [Int]): [Picture]
     picture(id: ID): Picture
+    categories: [Category]
+    userCategories(userId: String!): [Category]
     albums: [Album]
     album(id: ID): Album
-    categories: [Category]
-    categorie(id: ID): Category
   }
 
   type Mutation {
@@ -120,8 +120,10 @@ export default gql`
     createPicture(data: createPictureInput): Picture
     updatePicture(id: ID, data: updatePictureInput): Picture
     deletePicture(id: ID): Picture
+    createCategory(userId: String!, name: String!): Category
+    updateCategory(id: String!, name: String): Category
+    deleteCategory(id: ID!): Category
     createAlbum(authorId: Int, data: albumCreateInput): Album
     updateAlbum(id: ID, data: albumUpdateInput): Album
-    createCategory(userId: Int, name: String): Category
   }
 `;
