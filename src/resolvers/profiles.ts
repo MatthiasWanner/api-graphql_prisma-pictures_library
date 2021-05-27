@@ -23,14 +23,6 @@ export const profileQueries = {
 
 export const profileMutations = {
   updateProfile: async (_parent: any, args: updateProfile, _context: any) => {
-    await prisma.user
-      .findUnique({
-        where: {
-          id: +args.userId,
-        },
-      })
-      .profile();
-
     return prisma.profile.update({
       where: {
         userId: +args.userId,
