@@ -43,7 +43,7 @@ model Album {
   id          Int           @default(autoincrement()) @id
   title       String
   createdAt   DateTime      @default(now())
-  content     Picture[]
+  content     String?
   published   Boolean       @default(false)
   author      User          @relation(fields: [authorId], references: [id])
   authorId    Int
@@ -55,7 +55,6 @@ model Picture {
   title         String
   url           String
   description   String?
-  albums        Album[]
   owner         User          @relation(fields: [ownerId], references: [id])
   ownerId       Int
 }
