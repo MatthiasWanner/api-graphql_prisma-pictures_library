@@ -11,27 +11,28 @@ generator client {
 }
 
 model User {
-  id            Int       @default(autoincrement()) @id
-  userName      String    @unique
-  name          String?   
-  lastName      String?
-  email         String?   @unique
-  role          Role      @default(USER)
-  profile       Profile?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @updatedAt @map(name: "updated_at")
-  pictures      Picture[]
-  albums        Album[]
-  categories    Category[]
+  id         Int        @id @default(autoincrement())
+  userName   String     @unique
+  name       String?
+  lastName   String?
+  email      String?    @unique
+  role       Role       @default(USER)
+  profile    Profile?
+  createdAt  DateTime   @default(now()) @map(name: "created_at")
+  updatedAt  DateTime   @default(now()) @updatedAt @map(name: "updated_at")
+  pictures   Picture[]
+  albums     Album[]
+  categories Category[]
+
   @@map(name: "users")
 }
 
 model Profile {
-  id            Int       @id @default(autoincrement())
-  bio           String?
-  profileImg    String?
-  user          User      @relation(fields: [userId], references: [id])
-  userId        Int       @unique
+  id         Int     @id @default(autoincrement())
+  bio        String?
+  profileImg String?
+  user       User    @relation(fields: [userId], references: [id])
+  userId     Int     @unique
 }
 
 enum Role {
@@ -40,29 +41,30 @@ enum Role {
 }
 
 model Album {
-  id          Int           @default(autoincrement()) @id
-  title       String
-  createdAt   DateTime      @default(now())
-  content     String?
-  published   Boolean       @default(false)
-  author      User          @relation(fields: [authorId], references: [id])
-  authorId    Int
-  categories  Category[]
+  id         Int        @id @default(autoincrement())
+  title      String
+  createdAt  DateTime   @default(now())
+  content    Picture[]
+  published  Boolean    @default(false)
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
+  categories Category[]
 }
 
 model Picture {
-  id            Int           @default(autoincrement()) @id
-  title         String
-  url           String
-  description   String?
-  owner         User          @relation(fields: [ownerId], references: [id])
-  ownerId       Int
+  id          Int     @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  owner       User    @relation(fields: [ownerId], references: [id])
+  ownerId     Int
+  albums      Album[]
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-  albums    Album[]   @relation(references: [id])
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
+  id     Int     @id @default(autoincrement())
+  name   String
+  albums Album[] @relation(references: [id])
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int
 }

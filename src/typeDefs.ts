@@ -33,7 +33,7 @@ export default gql`
     id: ID!
     title: String!
     createdAt: String
-    content: String
+    content: [Picture]
     published: Boolean
     author: User
     authorId: Int!
@@ -92,13 +92,12 @@ export default gql`
   input albumCreateInput {
     authorId: String!
     title: String!
-    content: String
-    categories: [String]
   }
 
   input albumUpdateInput {
     title: String
-    content: String
+    published: Boolean
+    content: [String]
     categories: [String]
   }
 
@@ -106,11 +105,11 @@ export default gql`
     users: [User]
     user(id: ID): User
     profile(userId: ID): Profile
-    pictures(picturesId: [Int]): [Picture]
+    pictures(userId: String): [Picture]
     picture(id: ID): Picture
-    categories: [Category]
+    categories(userId: String): [Category]
     userCategories(userId: String!): [Category]
-    albums: [Album]
+    albums(userId: String): [Album]
     album(id: ID): Album
   }
 

@@ -1,6 +1,7 @@
 import prisma from "../../lib/prisma";
 
-type Args = { id: string };
+type picturesArgs = { userId: string };
+type pictureArgs = { id: string };
 
 interface CreatePicture {
   data: {
@@ -17,16 +18,19 @@ interface updatePicture {
     title: string;
     url: string;
     description: string;
-    ownerId: string;
   };
 }
 
 export const pictureQueries = {
-  pictures: () => {
-    return prisma.picture.findMany();
+  pictures: (_parent: any, args: picturesArgs, _context: any) => {
+    return prisma.picture.findMany({
+      where: {
+        ownerId: +args.userId,
+      },
+    });
   },
 
-  picture: (_parent: any, args: Args, _context: any) => {
+  picture: (_parent: any, args: pictureArgs, _context: any) => {
     return prisma.picture.findUnique({
       where: {
         id: +args.id,
@@ -37,13 +41,16 @@ export const pictureQueries = {
 
 export const pictureMutations = {
   createPicture: async (_parent: any, args: CreatePicture, _context: any) => {
-    console.log(args);
     return await prisma.picture.create({
       data: {
         title: args.data.title,
         url: args.data.url,
         description: args.data.description,
-        ownerId: +args.data.ownerId,
+        owner: {
+          connect: {
+            id: +args.data.ownerId,
+          },
+        },
       },
     });
   },
@@ -61,7 +68,7 @@ export const pictureMutations = {
     });
   },
 
-  deletePicture: async (_parent: any, args: Args, _context: any) => {
+  deletePicture: async (_parent: any, args: pictureArgs, _context: any) => {
     return await prisma.picture.delete({
       where: {
         id: +args.id,

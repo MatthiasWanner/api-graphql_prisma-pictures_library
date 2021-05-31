@@ -11,8 +11,12 @@ type CreateCategory = {
 type updateCategory = { id: string; name: string };
 
 export const categoryQueries = {
-  categories: () => {
-    return prisma.category.findMany();
+  categories: (_parent: any, args: queryArgs, _context: any) => {
+    return prisma.category.findMany({
+      where: {
+        userId: +args.userId,
+      },
+    });
   },
 
   userCategories: (_parent: any, args: queryArgs, _context: any) => {
