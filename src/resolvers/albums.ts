@@ -1,34 +1,11 @@
-import { ALL } from "dns";
-import prisma from "../../lib/prisma";
-
-type albumsArgs = { userId: string };
-type albumArgs = { id: string };
-
-type CreateAlbum = {
-  data: {
-    title: string;
-    authorId: string;
-  };
-};
-
-type UpdateAlbum = {
-  id: string;
-  data: {
-    title: string;
-    published: boolean;
-    content: string[];
-    categories: string[];
-  };
-};
+import prisma from '../../lib/prisma';
+import { CreateAlbum, UpdateAlbum } from './interfaces';
 
 export const albumQueries = {
-  albums: (_parent: any, args: albumsArgs, _context: any) => {
+  AllAlbums: () => {
     return prisma.album.findMany({
-      where: {
-        authorId: +args.userId,
-      },
       include: {
-        content: {
+        pictures: {
           select: {
             title: true,
             url: true,
@@ -44,7 +21,33 @@ export const albumQueries = {
     });
   },
 
-  album: async (_parent: any, args: albumArgs, _context: any) => {
+  AllUserAlbums: async (
+    _parent: any,
+    args: { userId: number },
+    _context: any
+  ) => {
+    return await prisma.album.findMany({
+      where: {
+        authorId: +args.userId,
+      },
+      include: {
+        pictures: {
+          select: {
+            title: true,
+            url: true,
+            description: true,
+          },
+        },
+        categories: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  },
+
+  OneAlbum: async (_parent: any, args: { id: number }, _context: any) => {
     return await prisma.album.findUnique({
       where: {
         id: +args.id,
@@ -70,9 +73,10 @@ export const albumMutations = {
       },
       data: {
         title: args.data.title,
+        description: args.data.description,
         published: args.data.published,
-        content: {
-          connect: args.data.content.map((id) => ({
+        pictures: {
+          connect: args.data.pictures.map((id) => ({
             id: +id,
           })),
         },
@@ -85,11 +89,12 @@ export const albumMutations = {
     });
   },
 
-  deleteAlbum: async (_parent: any, args: albumArgs, _context: any) => {
-    return await prisma.album.delete({
+  deleteAlbum: async (_parent: any, args: { id: number }, _context: any) => {
+    await prisma.album.delete({
       where: {
         id: +args.id,
       },
     });
+    return { message: 'album deleted' };
   },
 };

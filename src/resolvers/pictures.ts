@@ -1,28 +1,8 @@
-import prisma from "../../lib/prisma";
-
-type picturesArgs = { userId: string };
-type pictureArgs = { id: string };
-
-interface CreatePicture {
-  data: {
-    title: string;
-    url: string;
-    description: string;
-    ownerId: string;
-  };
-}
-
-interface updatePicture {
-  id: string;
-  data: {
-    title: string;
-    url: string;
-    description: string;
-  };
-}
+import prisma from '../../lib/prisma';
+import { CreatePicture, UpdatePicture } from './interfaces';
 
 export const pictureQueries = {
-  pictures: (_parent: any, args: picturesArgs, _context: any) => {
+  UserPictures: (_parent: any, args: { userId: string }, _context: any) => {
     return prisma.picture.findMany({
       where: {
         ownerId: +args.userId,
@@ -30,7 +10,7 @@ export const pictureQueries = {
     });
   },
 
-  picture: (_parent: any, args: pictureArgs, _context: any) => {
+  OnePicture: (_parent: any, args: { id: string }, _context: any) => {
     return prisma.picture.findUnique({
       where: {
         id: +args.id,
@@ -55,7 +35,7 @@ export const pictureMutations = {
     });
   },
 
-  updatePicture: async (_parent: any, args: updatePicture, _context: any) => {
+  updatePicture: async (_parent: any, args: UpdatePicture, _context: any) => {
     return await prisma.picture.update({
       where: {
         id: +args.id,
@@ -68,7 +48,7 @@ export const pictureMutations = {
     });
   },
 
-  deletePicture: async (_parent: any, args: pictureArgs, _context: any) => {
+  deletePicture: async (_parent: any, args: { id: string }, _context: any) => {
     return await prisma.picture.delete({
       where: {
         id: +args.id,

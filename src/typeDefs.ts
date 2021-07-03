@@ -1,14 +1,15 @@
-import { gql } from "apollo-server-core";
+import { gql } from 'apollo-server-core';
 
 export default gql`
   type User {
     id: ID!
     userName: String!
-    name: String
+    firstName: String
     lastName: String
-    email: String
+    avatarUrl: String
+    bio: String
+    email: String!
     role: Role
-    profile: Profile
     createdAt: String
     updatedAt: String
     pictures: [Picture]
@@ -21,22 +22,16 @@ export default gql`
     ADMIN
   }
 
-  type Profile {
-    id: ID!
-    bio: String
-    profileImg: String
-    user: User
-    userId: Int!
-  }
-
   type Album {
     id: ID!
     title: String!
-    createdAt: String
-    content: [Picture]
+    description: String
+    pictures: [Picture]
     published: Boolean
+    createdAt: String
+    updatedAt: String
     author: User
-    authorId: Int!
+    authorId: ID!
     categories: [Category]
   }
 
@@ -47,7 +42,7 @@ export default gql`
     description: String
     albums: [Album]
     owner: User
-    ownerId: Int!
+    ownerId: ID!
   }
 
   type Category {
@@ -55,32 +50,30 @@ export default gql`
     name: String!
     albums: [Album]
     user: User
-    userId: Int!
+    userId: ID!
   }
 
   input userCreateInput {
     userName: String!
-    email: String
-    name: String
-    lastName: String
+    email: String!
+    password: String
   }
 
   input updateUserInput {
+    userName: String
     email: String
-    name: String
+    password: String
+    firstName: String
     lastName: String
-  }
-
-  input profileInput {
     bio: String
-    profileImg: String
+    avatarUrl: String
   }
 
   input createPictureInput {
     title: String!
     url: String!
     description: String
-    ownerId: String!
+    ownerId: ID!
   }
 
   input updatePictureInput {
@@ -90,42 +83,43 @@ export default gql`
   }
 
   input albumCreateInput {
-    authorId: String!
+    authorId: ID!
     title: String!
+    description: String
   }
 
   input albumUpdateInput {
     title: String
+    description: String
     published: Boolean
-    content: [String]
+    pictures: [String]
     categories: [String]
   }
 
   type Query {
-    users: [User]
-    user(id: ID): User
-    profile(userId: ID): Profile
-    pictures(userId: String): [Picture]
-    picture(id: ID): Picture
-    categories(userId: String): [Category]
-    userCategories(userId: String!): [Category]
-    albums(userId: String): [Album]
-    album(id: ID): Album
+    AllUsers: [User]
+    OneUser(id: ID!): User
+    UserPictures(userId: ID!): [Picture]
+    OnePicture(id: ID!): Picture
+    UserCategories(userId: ID!): [Category]
+    OneCategory(id: ID!): Category
+    AllAlbums: [Album]
+    AllUserAlbums(userId: ID!): [Album]
+    OneAlbum(id: ID!): Album
   }
 
   type Mutation {
-    createUser(data: userCreateInput): User
-    updateUser(id: ID, data: updateUserInput): User
-    deleteUser(id: ID): User
-    updateProfile(userId: ID, data: profileInput): Profile
-    createPicture(data: createPictureInput): Picture
-    updatePicture(id: ID, data: updatePictureInput): Picture
-    deletePicture(id: ID): Picture
-    createCategory(userId: String!, name: String!): Category
-    updateCategory(id: String!, name: String): Category
+    createUser(data: userCreateInput!): User
+    updateUser(id: ID!, data: updateUserInput!): User
+    deleteUser(id: ID!): User
+    createPicture(data: createPictureInput!): Picture
+    updatePicture(id: ID!, data: updatePictureInput!): Picture
+    deletePicture(id: ID!): Picture
+    createCategory(userId: ID!, name: String!): Category
+    updateCategory(id: ID!, name: String!): Category
     deleteCategory(id: ID!): Category
-    createAlbum(data: albumCreateInput): Album
-    updateAlbum(id: ID, data: albumUpdateInput): Album
-    deleteAlbum(id: ID): Album
+    createAlbum(data: albumCreateInput!): Album
+    updateAlbum(id: ID!, data: albumUpdateInput!): Album
+    deleteAlbum(id: ID!): Album
   }
 `;
