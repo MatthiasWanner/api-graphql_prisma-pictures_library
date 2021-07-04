@@ -2,7 +2,7 @@ export interface CreateUser {
   data: {
     userName: string;
     email: string;
-    password?: string;
+    password: string;
     isOAuth: boolean;
   };
 }
