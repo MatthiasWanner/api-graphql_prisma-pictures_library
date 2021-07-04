@@ -62,11 +62,17 @@ export default gql`
   input updateUserInput {
     userName: String
     email: String
-    password: String
+    oldPassword: String
+    newPassword: String
     firstName: String
     lastName: String
     bio: String
     avatarUrl: String
+  }
+
+  type UpdateUserResponse {
+    message: String
+    user: User
   }
 
   input createPictureInput {
@@ -110,7 +116,7 @@ export default gql`
 
   type Mutation {
     createUser(data: userCreateInput!): User
-    updateUser(id: ID!, data: updateUserInput!): User
+    updateUser(id: ID!, data: updateUserInput!): UpdateUserResponse
     deleteUser(id: ID!): User
     createPicture(data: createPictureInput!): Picture
     updatePicture(id: ID!, data: updatePictureInput!): Picture

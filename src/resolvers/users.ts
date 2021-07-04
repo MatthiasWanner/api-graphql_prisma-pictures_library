@@ -36,26 +36,44 @@ export const userMutations = {
   updateUser: async (_parent: any, args: updateUser, _context: any) => {
     let hashedPassword;
 
-    if (args.data.password)
-      hashedPassword = bcrypt.hashSync(
-        args.data.password,
-        process.env.BCRYPT_SALT!
-      );
-
-    return await prisma.user.update({
+    const user = await prisma.user.findUnique({
       where: {
         id: +args.id,
       },
-      data: {
-        email: args.data.email,
-        firstName: args.data.firstName,
-        lastName: args.data.lastName,
-        userName: args.data.userName,
-        bio: args.data.bio,
-        avatarUrl: args.data.avatarUrl,
-        password: hashedPassword,
-      },
     });
+
+    if (args.data.newPassword) {
+      if (
+        user &&
+        user.password &&
+        !bcrypt.compareSync(args.data.oldPassword, user.password)
+      ) {
+        return { message: 'Wrong datas', user: user };
+      }
+
+      hashedPassword = bcrypt.hashSync(
+        args.data.newPassword,
+        +process.env.BCRYPT_SALT!
+      );
+    }
+
+    return {
+      message: 'User Updated',
+      user: await prisma.user.update({
+        where: {
+          id: +args.id,
+        },
+        data: {
+          email: args.data.email,
+          firstName: args.data.firstName,
+          lastName: args.data.lastName,
+          userName: args.data.userName,
+          bio: args.data.bio,
+          avatarUrl: args.data.avatarUrl,
+          password: hashedPassword,
+        },
+      }),
+    };
   },
 
   deleteUser: async (_parent: any, args: { id: string }, _context: any) => {

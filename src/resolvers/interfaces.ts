@@ -12,7 +12,8 @@ export interface updateUser {
   data: {
     userName: string;
     email: string;
-    password: string;
+    oldPassword: string;
+    newPassword: string;
     firstName: string;
     lastName: string;
     bio: string;
